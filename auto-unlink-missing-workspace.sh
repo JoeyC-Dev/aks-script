@@ -4,6 +4,9 @@
 # Use "az account set --subscription <sub_id>" to set current subscription.
 # 
 # Usage: ./auto-unlink-missing-workspace.sh
+# 
+# Copyright (c) 2024, Joey Chen.
+# License: MIT
 
 if ! command -v az &> /dev/null
 then
