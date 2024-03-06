@@ -46,7 +46,7 @@ for((i=$i;i<$pending_num;++i)) do
     rG=$(jq -r ".[${i}][1]" <<< ${pending_list})
     workspace=$(jq -r ".[${i}][2]" <<< ${pending_list})
 
-    echo "Checking the workspace availability for AKS \"${name}\"... Progress: $((i+1))/${pending_num}"
+    echo "Checking the workspace presence for AKS \"${name}\"... Progress: $((i+1))/${pending_num}"
     output=$(az resource show --ids $workspace --only-show-errors 2>/dev/null)
     if [[ -z ${output} ]]; then
         echo -e "Found workspace linked to AKS \"${bold}${name}${normal}\" is missing. AKS resource group: ${bold}${rG}${normal}; Workspace URI: ${bold}${workspace}${normal}"
