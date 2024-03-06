@@ -57,8 +57,6 @@ for((i=$i;i<$pending_num;++i)) do
     fi
 done 
 
-# malfunctioned_aks='[ [ "akari-test-ak1", "akari-aks" ], [ "joeylab-aks-gener1l", "joeylab" ] ]'
-
 malfunctioned_num=$(jq -r "length"  <<< ${malfunctioned_aks})
 
 if [[ ${malfunctioned_num} == 0 ]]; then
