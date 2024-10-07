@@ -23,7 +23,7 @@ az network vnet subnet create -n nodesubnet2 -g ${rG} --vnet-name ${vnet} --addr
 az network vnet subnet create -n podsubnet1 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.210.0.0/24 -o none --no-wait
 az network vnet subnet create -n podsubnet2 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.211.0.0/24 -o none
 
-vnetId=$(az resource list -g ${rG} \
+vnetId=$(az resource list -n ${vnet} -g ${rG} \
     --resource-type Microsoft.Network/virtualNetworks \
     --query [0].id -o tsv)
 
