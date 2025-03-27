@@ -3,7 +3,7 @@
 # 
 # Usage: ./setup-podsubnet.sh
 # 
-# Copyright (c) 2024, Joey Chen.
+# Copyright (c) 2025, Joey Chen.
 # License: MIT
 
 # Basic parameter
@@ -17,11 +17,11 @@ echo "Your resource group will be: ${rG}"
 az group create -n ${rG} -l ${location} -o none
 
 # Preparing VNet
-az network vnet create -g ${rG} -n ${vnet} --address-prefixes 10.208.0.0/12 -o none 
-az network vnet subnet create -n nodesubnet1 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.208.0.0/24 -o none --no-wait
-az network vnet subnet create -n nodesubnet2 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.209.0.0/24 -o none --no-wait
-az network vnet subnet create -n podsubnet1 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.210.0.0/24 -o none --no-wait
-az network vnet subnet create -n podsubnet2 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.211.0.0/24 -o none
+az network vnet create -g ${rG} -n ${vnet} --address-prefixes ['10.208.0.0/16','10.209.0.0/16'] -o none 
+az network vnet subnet create -n nodesubnet1 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.208.0.0/25 -o none --no-wait
+az network vnet subnet create -n nodesubnet2 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.208.0.128/25 -o none --no-wait
+az network vnet subnet create -n podsubnet1 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.209.0.0/24 -o none --no-wait
+az network vnet subnet create -n podsubnet2 -g ${rG} --vnet-name ${vnet} --address-prefixes 10.209.2.0/23 -o none
 
 vnetId=$(az resource list -n ${vnet} -g ${rG} \
     --resource-type Microsoft.Network/virtualNetworks \
@@ -44,7 +44,7 @@ az aks get-credentials -n ${aks} -g ${rG}
 # Add new user nodepool with Podsubnet feature
 az aks nodepool add --cluster-name ${aks} -g ${rG} -n userpool \
     --mode User \
-    --node-count 1 \
+    --node-count 3 \
     --node-vm-size Standard_A4_v2 \
     --vnet-subnet-id ${vnetId}/subnets/nodesubnet2 \
     --pod-subnet-id ${vnetId}/subnets/podsubnet2 \
